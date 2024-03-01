@@ -2,8 +2,6 @@ from django.db import models
 from apps.common.models import TimeStampedModel
 
 from utils import bot
-from . import tasks
-
 
 class TelegramBot(TimeStampedModel):
     title = models.CharField(max_length=30)
@@ -18,7 +16,7 @@ class TelegramBot(TimeStampedModel):
 
     def save(self, *args, **kwargs):
         if self._bot_token != self.bot_token:
-            tasks.set_webhook_request.delay(self.bot_token)
+            bot.set_webhook_request(self.bot_token)
 
             username = bot.get_username_request(self.bot_token)
             self.bot_username = username
@@ -26,7 +24,7 @@ class TelegramBot(TimeStampedModel):
             self._bot_token = self.bot_token
 
         if self._title != self.title:
-            tasks.set_name_request.delay(self.bot_token, self.title)
+            bot.set_name_request(self.bot_token, self.title)
 
             self._title = self.title
 
