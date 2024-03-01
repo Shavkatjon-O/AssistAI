@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load allauth account %}
+{% block title %}AssistAI | Log In{% endblock title %}
+
+{% block content %}
+<div class="w-full min-h-screen bg-zinc-900 flex flex-col justify-between items-center">
+  <div class="my-auto w-full max-w-sm">
+    <div class="w-full mb-2 text-xl text-white font-semibold flex justify-center">
+      <span>Log into your account!</span>
+    </div>
+
+    <form class="space-y-4" method="post" action="{% url 'account_login' %}">
+      {% csrf_token %}
+
+      <input class="w-full p-3 rounded-sm transition ring-1 focus:ring-1 text-zinc-200 placeholder:text-zinc-400 ring-zinc-700 hover:ring-zinc-500 focus:ring-zinc-400 bg-zinc-800 border-none focus:border-none outline-none focus:outline-none" type="text" placeholder="{{ form.login.label }}" name="{{ form.login.name }}" id="{{ form.login.id }}" autocomplete="off" required>
+      <input class="w-full p-3 rounded-sm transition ring-1 focus:ring-1 text-zinc-200 placeholder:text-zinc-400 ring-zinc-700 hover:ring-zinc-500 focus:ring-zinc-400 bg-zinc-800 border-none focus:border-none outline-none focus:outline-none" type="password" placeholder="{{ form.password.label }}" name="{{ form.password.name }}" id="{{ form.password.id }}" autocomplete="off" required>
+      
+      {% if form.errors %}
+        <div class="w-full p-2 rounded-sm text-sm text-red-400 flex justify-center ring-1 ring-zinc-600">
+          <span>Invalid username or password!</span>
+        </div>
+      {% endif %}
+
+      <div class="text-sm flex justify-between items-center">
+        <div class="space-x-2 flex items-center">
+          <input class="w-4 h-4 rounded-sm bg-zinc-700 focus:ring-0"  type="checkbox" name="{{ form.remember.name }}" id="{{ form.remember.id }}">
+          <label class="text-zinc-200" for="{{ form.remember.id }}">{{ form.remember.label }}</label>
+        </div>
+        <a class="text-blue-400" href="">
+          <span>Forgot your password?</span>
+        </a>
+      </div>
+
+      <button class="w-full py-3 rounded-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 focus:ring-1 focus:ring-blue-600 focus:bg-blue-700" type="submit">Log In</button>
+      
+      <div class="w-full space-x-1 font-medium flex justify-center">
+        <span class="text-zinc-200">Don't have account yet?</span>
+        <a class="text-blue-400" href="{% url 'account_signup' %}">
+          <span>Sign Up!</span>
+        </a>
+      </div>
+
+      {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+      {% endif %}
+    </form>
+
+    <div class="w-full border-b border-b-zinc-800 mb-6 mt-4"></div>
+
+    {% if SOCIALACCOUNT_ENABLED %}
+      {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+    {% endif %}
+  </div>
+
+  <div class="w-full py-6 text-sm text-zinc-400 flex justify-center">
+    <p>&copy; 2024 AssistAI by Shavkatjon-O 🚀</p>
+  </div>
+</div>
+{% endblock content %}

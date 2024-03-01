@@ -1,0 +1,7 @@
+Django==5.0.2
+django-tailwind==3.8.0
+django-browser-reload==1.12.1
+django-allauth==0.61.1
+python-telegram-bot==13.15
+Pillow==10.2.0
+celery[redis]==5.3.6

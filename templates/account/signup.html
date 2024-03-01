@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}AssistAI | Sign Up{% endblock title %}
+
+{% block content %}
+<div class="w-full min-h-screen bg-zinc-900 flex flex-col justify-between items-center">
+  <div class="my-auto w-full max-w-sm">
+    <div class="w-full text-white flex flex-col items-center">
+      <span class="text-zinc-300">It's quick and easy!</span>
+      <span class="text-xl font-semibold">Create a new account</span>
+    </div>
+
+    <form class="space-y-4" method="post" action="{% url 'account_signup' %}">
+      {% csrf_token %}
+
+      <input class="w-full p-3 rounded-sm transition ring-1 focus:ring-1 text-zinc-200 placeholder:text-zinc-400 ring-zinc-700 hover:ring-zinc-500 focus:ring-zinc-400 bg-zinc-800 border-none focus:border-none outline-none focus:outline-none" type="username" placeholder="{{ form.username.label }}" name="{{ form.username.name }}" id="{{ form.username.id }}" autocomplete="off" required>
+      <input class="w-full p-3 rounded-sm transition ring-1 focus:ring-1 text-zinc-200 placeholder:text-zinc-400 ring-zinc-700 hover:ring-zinc-500 focus:ring-zinc-400 bg-zinc-800 border-none focus:border-none outline-none focus:outline-none" type="email" placeholder="{{ form.email.label }}" name="{{ form.email.name }}" id="{{ form.email.id }}" autocomplete="off" required>
+      <input class="w-full p-3 rounded-sm transition ring-1 focus:ring-1 text-zinc-200 placeholder:text-zinc-400 ring-zinc-700 hover:ring-zinc-500 focus:ring-zinc-400 bg-zinc-800 border-none focus:border-none outline-none focus:outline-none" type="password" placeholder="{{ form.password1.label }}" name="{{ form.password1.name }}" id="{{ form.password1.id }}" autocomplete="off" required>
+      <input class="w-full p-3 rounded-sm transition ring-1 focus:ring-1 text-zinc-200 placeholder:text-zinc-400 ring-zinc-700 hover:ring-zinc-500 focus:ring-zinc-400 bg-zinc-800 border-none focus:border-none outline-none focus:outline-none" type="password" placeholder="{{ form.password2.label }}" name="{{ form.password2.name }}" id="{{ form.password2.id }}" autocomplete="off" required>
+      
+      {% if form.errors %}
+        <div class="w-full p-2 space-y-1 rounded-sm flex flex-col justify-center text-sm ring-1 ring-zinc-600 text-red-400">
+          {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+              <div class="w-full text-sm text-red-400">
+                • {{ error }}
+              </div>
+            {% endfor %}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <button class="w-full py-3 rounded-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 focus:ring-1 focus:ring-blue-600 focus:bg-blue-700" type="submit">Log In</button>
+      
+      <div class="w-full space-x-1 font-medium flex justify-center">
+        <span class="text-zinc-200">Already have account?</span>
+        <a class="text-blue-400" href="{% url 'account_login' %}">
+          <span>Log In!</span>
+        </a>
+      </div>
+
+      {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+      {% endif %}
+    </form>
+
+    <div class="w-full border-b border-b-zinc-800 mb-6 mt-4"></div>
+
+    {% if SOCIALACCOUNT_ENABLED %}
+      {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+    {% endif %}
+  </div>
+
+  <div class="w-full py-6 text-sm text-zinc-400 flex justify-center">
+    <p>&copy; 2024 AssistAI by Shavkatjon-O 🚀</p>
+  </div>
+</div>
+{% endblock content %}
