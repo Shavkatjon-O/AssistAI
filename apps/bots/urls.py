@@ -15,7 +15,7 @@ urlpatterns = [
     ),
     path(
         "telegram-bots/create/",
-        views.TelegramBotCreate.as_view(),
+        views.TelegramBotCreateView.as_view(),
         name="telegram-bots-create",
     )
 ]
