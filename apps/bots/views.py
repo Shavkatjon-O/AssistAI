@@ -2,7 +2,6 @@ import os
 import json
 
 from django.conf import settings
-from django.db.models.query import QuerySet
 from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -20,8 +19,10 @@ from telegram.ext import (
     Filters,
 )
 
-from .telegrambot import start, message
-from .models import TelegramBot
+from apps.bots.telegrambot import start, message
+from apps.bots import models
+
+from utils.bot import set_webhook_request
 
 
 def setup(token):
@@ -74,7 +75,7 @@ def handle_telegram_webhook(request, bot_token):
 class TelegramBotListView(LoginRequiredMixin, generic.ListView):
     login_url = reverse_lazy("account_login")
 
-    model = TelegramBot
+    model = models.TelegramBot
     template_name = "bots/telegram-bots-list.html"
     context_object_name = "telegram_bots"
 
@@ -84,14 +85,33 @@ class TelegramBotListView(LoginRequiredMixin, generic.ListView):
         return queryset
     
 
-class TelegramBotCreate(LoginRequiredMixin, generic.CreateView):
+class TelegramBotCreateView(LoginRequiredMixin, generic.CreateView):
     login_url = reverse_lazy("account_login")
-    
-    fields = ("title", "bot_token")
-    model = TelegramBot
-    template_name = "bots/telegram-bots-list.html"
     success_url = reverse_lazy("telegram-bots-list")
+    
+    model = models.TelegramBot
+    fields = ("title", "bot_token")
+    template_name = "bots/telegram-bots-create.html"    
+
+    
+    def get_form(self, form_class=None):
+        form_class = super().get_form(form_class)
+        form_class.fields["title"].label = "Bot name"
+        return form_class
+    
 
     def form_valid(self, form):
+        token = form.instance.bot_token
+        bot_exists = models.TelegramBot.objects.filter(bot_token=token).exists()
+    
+        if bot_exists:
+            form.add_error("bot_token", "Telegram bot with this token already exists.")
+            return self.form_invalid(form)
+        
+        response = set_webhook_request(token)
+        if response.status_code != 200:
+            form.add_error("bot_token", "Please enter valid telegram bot token.")
+            return self.form_invalid(form)
+            
         form.instance.created_by = self.request.user
-        return super().form_valid(form)
+        return super(TelegramBotCreateView, self).form_valid(form)
