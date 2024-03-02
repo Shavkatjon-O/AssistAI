@@ -2,7 +2,6 @@ from django.contrib import admin
 from apps.bots import models
 
 
-# admin.site.register(models.TelegramBot)
 admin.site.register(models.TelegramProfile)
 
 
