@@ -8,9 +8,14 @@
     <div class="w-full flex p-4 justify-between items-center">
       <span class="text-lg">Telegram Bots</span>
       <div>
-        <button id="openPopup" class="py-2 px-4 rounded-md text-white bg-zinc-700 hover:bg-zinc-600 transition-all">
+        <div>
+          <a href="{% url 'telegram-bots-create' %}" class="py-2 px-4 rounded-md text-white bg-zinc-700 hover:bg-zinc-600 transition-all">
+            <span>Add Telegram Bot</span>
+          </a>
+        </div>
+        <!-- <button id="openPopup" class="py-2 px-4 rounded-md text-white bg-zinc-700 hover:bg-zinc-600 transition-all">
           <span>Add Telegram Bot</span>
-        </button>
+        </button> -->
       </div>
     </div>
     <div class="w-full flex flex-wrap">
@@ -32,7 +37,7 @@
   </div>
 </div>
 
-<div id="popup" class="hidden">
+<!-- <div id="popup" class="hidden">
   <div id="popup" class="fixed inset-0 bg-zinc-900 bg-opacity-70 flex justify-center items-center">
     <div class="w-[460px] rounded-lg bg-white">
       <div class="w-full p-2 flex justify-between items-center border-b border-b-gray-300">
@@ -71,6 +76,6 @@
   document.getElementById('closePopup').addEventListener('click', function() {
     document.getElementById('popup').classList.add('hidden');
   });
-</script>
+</script> -->
 
 {% endblock content %}

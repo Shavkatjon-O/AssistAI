@@ -3,19 +3,19 @@
 {% load static %}
 
 <div class="absolute left-64 right-0 top-0 h-16 border-b border-b-gray-300 bg-white">
-  <div class="h-full flex justify-between items-center px-4">
+  <div class="h-full flex justify-between items-center px-6">
     <span></span>
     <div class="flex items-center space-x-2">
 
+      <span>{{ user.username }}</span>
+
       <div class="w-10 h-10">
         {% if user.image %}
-          <img class="w-full h-full rounded-full shadow" src="{{ user.image.url }}" alt="profile-image">
+          <img class="w-full h-full rounded-lg shadow" src="{{ user.image.url }}" alt="profile-image">
         {% else %}
-          <img class="w-full h-full rounded-full shadow" src="{% static 'default-files/default-profile-image.jpg' %}" alt="profile-image">
+          <img class="w-full h-full rounded-lg shadow" src="{% static 'default-files/default-profile-image.jpg' %}" alt="profile-image">
         {% endif %}
       </div>
-
-      <span>{{ user.username }}</span>
 
     </div>
   </div>
