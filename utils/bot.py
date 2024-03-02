@@ -7,7 +7,7 @@ def set_webhook_request(bot_token):
     webhook_url = settings.WEBHOOK_URL
     url = f"https://api.telegram.org/bot{bot_token}/setWebhook?url={webhook_url}/bots/handle_telegram_webhook/{bot_token}"
     response = requests.post(url)
-    return response.json()
+    return response
 
 
 def set_name_request(bot_token, new_name):
