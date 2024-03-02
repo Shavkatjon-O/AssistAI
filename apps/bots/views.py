@@ -22,7 +22,11 @@ from telegram.ext import (
 from apps.bots.telegrambot import start, message
 from apps.bots import models
 
-from utils.bot import set_webhook_request
+from utils.bot import (
+    set_webhook_request,
+    set_bot_name_request,
+    get_bot_username_request,
+)
 
 
 def setup(token):
@@ -83,35 +87,30 @@ class TelegramBotListView(LoginRequiredMixin, generic.ListView):
         queryset = super().get_queryset()
         queryset = queryset.filter(created_by=self.request.user)
         return queryset
-    
+
 
 class TelegramBotCreateView(LoginRequiredMixin, generic.CreateView):
     login_url = reverse_lazy("account_login")
     success_url = reverse_lazy("telegram-bots-list")
-    
-    model = models.TelegramBot
-    fields = ("title", "bot_token")
-    template_name = "bots/telegram-bots-create.html"    
 
-    
-    def get_form(self, form_class=None):
-        form_class = super().get_form(form_class)
-        form_class.fields["title"].label = "Bot name"
-        return form_class
-    
+    model = models.TelegramBot
+    fields = ("bot_name", "bot_token")
+    template_name = "bots/telegram-bots-create.html"
 
     def form_valid(self, form):
         token = form.instance.bot_token
-        bot_exists = models.TelegramBot.objects.filter(bot_token=token).exists()
-    
-        if bot_exists:
-            form.add_error("bot_token", "Telegram bot with this token already exists.")
-            return self.form_invalid(form)
-        
+        bot_name = form.instance.bot_name
+
         response = set_webhook_request(token)
         if response.status_code != 200:
             form.add_error("bot_token", "Please enter valid telegram bot token.")
             return self.form_invalid(form)
-            
+
+        set_bot_name_request(token, bot_name)
+        username = get_bot_username_request(token)
+
+        form.instance.bot_username = username
         form.instance.created_by = self.request.user
+        form.instance.is_active = True
+
         return super(TelegramBotCreateView, self).form_valid(form)

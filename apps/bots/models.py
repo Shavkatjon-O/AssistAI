@@ -1,19 +1,24 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from apps.common.models import TimeStampedModel
-from utils import bot
+
 
 User = get_user_model()
 
+
 class TelegramBot(TimeStampedModel):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
-    
-    title = models.CharField(max_length=30)
-    bot_token = models.CharField(max_length=255)
-    bot_username = models.CharField(max_length=125, editable=False, blank=True, null=True)
+
+    bot_name = models.CharField(max_length=30)
+    bot_token = models.CharField(max_length=255, unique=True)
+    bot_username = models.CharField(
+        max_length=125, editable=False, blank=True, null=True
+    )
+
+    is_active = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.title
+        return self.bot_name
 
     class Meta:
         db_table = "telegram_bots"
