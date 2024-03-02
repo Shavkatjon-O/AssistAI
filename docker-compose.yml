@@ -35,5 +35,12 @@ services:
     depends_on:
       - db
 
+  nginx:
+    build: ./compose/nginx
+    ports:
+      - "8080:80"
+    depends_on:
+      - web_django
+
 volumes:
   postgres_data:
