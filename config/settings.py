@@ -1,19 +1,15 @@
-import os
+import environ
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "django-insecure-+*#^k%!hs*mdoce38!tku=ttptys6v4u!1&o)w)l_qazyx-h+r"
+env = environ.Env()
+env.read_env(".env")
 
-DEBUG = True
+SECRET_KEY = env.str("SECRET_KEY")
+DEBUG = env.bool("DEBUG")
 
 ALLOWED_HOSTS = ["*"]
-
-if DEBUG:
-    from dotenv import load_dotenv
-
-    # load environment variables from .env file
-    load_dotenv()
 
 DJANGO_APPS = [
     "django.contrib.admin",
@@ -80,20 +76,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": env.str("DB_NAME"),
+        "USER": env.str("DB_USER"),
+        "PASSWORD": env.get_value("DB_PASSWORD"),
+        "HOST": env.str("DB_HOST"),
+        "PORT": env.str("DB_PORT")
     }
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -110,21 +103,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
-
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
 STATICFILES_DIRS = (BASE_DIR / "staticfiles",)
@@ -133,32 +115,27 @@ STATIC_ROOT = BASE_DIR / "static"
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "users.User"
 
 TAILWIND_APP_NAME = "apps.theme"
-
 INTERNAL_IPS = ["127.0.0.1"]
 
 # Django Allauth
-
 SOCIALACCOUNT_PROVIDERS = {
     "github": {
         "APP": {
-            "client_id": os.getenv("GITHUB_CLIENT_ID"),
-            "secret": os.getenv("GITHUB_SECRET"),
+            "client_id": env.str("GITHUB_CLIENT_ID"),
+            "secret": env.str("GITHUB_SECRET"),
             "key": "",
         },
         "SCOPE": ["user"],
     },
     "facebook": {
         "APP": {
-            "client_id": os.getenv("FACEBOOK_CLIENT_ID"),
-            "secret": os.getenv("FACEBOOK_SECRET"),
+            "client_id": env.str("FACEBOOK_CLIENT_ID"),
+            "secret": env.str("FACEBOOK_SECRET"),
             "key": "",
         },
         "METHOD": "oauth2",
@@ -182,8 +159,8 @@ SOCIALACCOUNT_PROVIDERS = {
     },
     "google": {
         "APP": {
-            "client_id": os.getenv("GOOGLE_CLIENT_ID"),
-            "secret": os.getenv("GOOGLE_SECRET"),
+            "client_id": env.str("GOOGLE_CLIENT_ID"),
+            "secret": env.str("GOOGLE_SECRET"),
             "key": "",
         },
         "SCOPE": [
@@ -212,11 +189,8 @@ LOGIN_REDIRECT_URL = "dashboard-page"
 LOGOUT_REDIRECT_URL = "account_login"
 
 # Telegram
-
-WEBHOOK_URL = os.getenv("WEBHOOK_URL")
-
+WEBHOOK_URL = env.str("WEBHOOK_URL")
 
 # Celery
-
-CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
-CELERY_RESULT_BACKEND = os.getenv("CELERY_BROKER_URL")
+CELERY_BROKER_URL = env.str("CELERY_BROKER_URL")
+CELERY_RESULT_BACKEND = env.str("CELERY_BROKER_URL")
