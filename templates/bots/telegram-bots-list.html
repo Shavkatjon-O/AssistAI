@@ -1,34 +1,72 @@
 {% extends 'common/home-page-base.html' %}
 
+{% load static %}
+
 {% block content %}
 {{ block.super }}
 
 <div class="absolute left-64 right-0 top-16 bottom-0 bg-gray-200">
-  <div class="w-full h-full p-4">
-    <div class="w-full flex p-4 justify-between items-center">
-      <span class="text-lg">Telegram Bots</span>
-      <div>
-        <a class="block py-2 px-4 rounded-md text-white bg-zinc-800 hover:bg-zinc-700 transition-all" href="">
-          <span>Add Telegram Bot</span>
+  <div class="w-full h-full p-4 overflow-y-scroll space-y-4">
+    <div class="px-6 py-3 rounded-md w-full bg-zinc-700 shadow-gray-300 border border-gray-300">
+      <span class="text-lg text-white font-semibold">Telegram Bots</span>
+    </div>
+    <div class="w-full p-4 rounded-lg space-y-4 bg-white shadow-xl shadow-gray-300 border border-gray-400">
+      <div class="w-full flex justify-between items-center">
+        <span class="text-lg">You have {{ telegram_bots|length }} telegram bots</span>
+        <a href="{% url 'telegram-bots-create' %}" class="block p-3 rounded-lg bg-zinc-700">
+          <span class="text-white font-semibold">Add new telegram bot</span>
         </a>
       </div>
     </div>
-    <div class="w-full flex flex-wrap">
-      {% for bot in telegram_bots %}
-        <div class="w-1/3 h-36 p-2">
-          <div class="w-full h-full flex flex-col justify-between p-4 bg-white border border-gray-200 shadow-md cursor-pointer hover:bg-gray-100 rounded-md">
-            <span>Username - {{ bot.bot_username }}</span>
-            <span>Bot name - {{ bot.title }}</span>
-            <div class="flex items-center space-x-2">
-              <span>Status -</span>
-              <div class="p-1 bg-green-500 rounded-md text-white font-semibold">
-                <span>Working</span>
-              </div>
+
+    {% if telegram_bots %}
+      {% for item in telegram_bots %}
+        <div class="w-full flex items-center p-4 rounded-lg bg-white shadow-xl shadow-gray-300 border border-gray-400">
+          <div class="mr-10">
+            <img class="w-20 h-20 object-cover" src="{% static 'default-files/telegram-bot.png' %}" alt="">
+          </div>
+          <div class="w-full flex items-center justify-between">
+            <div class="w-full">
+              <div class="flex space-x-1">
+                <span class="text-gray-600">Bot ID -</span> 
+                <span>{{ item.id }}</span>
+              </div> 
+              <div class="flex space-x-1">
+                <span class="text-gray-600">Name -</span> 
+                <span>{{ item.bot_name }}</span>
+              </div> 
+              <div class="flex space-x-1">
+                <span class="text-gray-600">Username -</span>
+                <a href="https://t.me/{{ item.bot_username }}">
+                  <span class="text-blue-800">@{{ item.bot_username }}</span>
+                </a>
+              </div> 
+              <div class="flex space-x-1">
+                <span class="text-gray-600">Status -</span>
+                {% if item.is_active %}
+                  <span class="text-green-600">Running</span>
+                {% else %}
+                  <span class="text-red-600">Stopped</span>
+                {% endif %}
+              </div> 
+              <div class="flex space-x-1">
+                <span class="text-gray-600">Created Date -</span> 
+                <span>{{ item.created_at }}</span>
+              </div> 
+            </div>
+            <div>
+              <a href="" class="block px-4 py-2 rounded-md font-medium text-white bg-blue-600">
+                <span>Configure</span>
+              </a>
             </div>
           </div>
         </div>
       {% endfor %}
-    </div>
+    {% else %}
+      <div class="px-6 py-3 rounded-md w-full bg-yellow-200 border border-yellow-400">
+        <span class="text-lg">You haven't added any telegram bots yet.</span>
+      </div>
+    {% endif %}
   </div>
 </div>
 

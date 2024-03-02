@@ -1,0 +1,44 @@
+{% extends 'common/home-page-base.html' %}
+
+{% block content %}
+{{ block.super }}
+
+<div class="absolute left-64 right-0 top-16 bottom-0 bg-gray-200">
+  <div class="w-full h-full p-4 overflow-y-scroll space-y-4">
+    <div class="px-6 py-3 rounded-md w-full bg-zinc-700 shadow-gray-300 border border-gray-300">
+      <span class="text-lg text-white font-semibold">Telegram Bots</span>
+    </div>
+    {% if form.errors %}
+      <div class="w-full px-6 py-3 rounded-md text-white bg-red-500">
+        {% for field in form %}
+          {% for error in field.errors %}
+            <span>{{ field.label }} : {{ error }}</span>
+          {% endfor %}
+        {% endfor %}
+      </div>
+    {% endif %}
+    <div class="w-full p-6 rounded-lg space-y-4 bg-white shadow-xl shadow-gray-300 border border-gray-400">
+      <div class="p-3 rounded-md w-full bg-gray-200 shadow-gray-300 border border-gray-400">
+        <span class="font-medium">Please fill in the form to add new telegram bot 🙂</span>
+      </div>
+      <form method="post" action="{% url 'telegram-bots-create' %}" class="w-full flex flex-col">
+        {% csrf_token %}
+        <div class="space-y-4">
+          <div class="flex px-1 flex-col space-y-2">
+            <label for="bot_name">Bot name</label>
+            <input class="p-2 rounded-sm transition ring-2 focus:ring-2 focus:ring-zinc-900 text-zinc-900 ring-zinc-400 bg-zinc-100 border-none focus:border-none outline-none focus:outline-none" id="bot_name" name="bot_name" type="text" placeholder="Your bot name" required>
+          </div>
+          <div class="flex px-1 flex-col space-y-2">
+            <label for="bot_token">Bot token</label>
+            <input class="p-2 rounded-sm transition ring-2 focus:ring-2 focus:ring-zinc-900 text-zinc-900 ring-zinc-400 bg-zinc-100 border-none focus:border-none outline-none focus:outline-none" id="bot_token" name="bot_token" type="text" placeholder="Your bot token" required>            
+          </div>
+          <button class="p-3 w-40 font-semibold rounded-md text-white bg-zinc-700 hover:bg-zinc-600 transition-all">
+            <span>Submit</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

@@ -2,7 +2,6 @@ import os
 import json
 
 from django.conf import settings
-from django.db.models.query import QuerySet
 from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -20,8 +19,14 @@ from telegram.ext import (
     Filters,
 )
 
-from .telegrambot import start, message
-from .models import TelegramBot
+from apps.bots.telegrambot import start, message
+from apps.bots import models
+
+from utils.bot import (
+    set_webhook_request,
+    set_bot_name_request,
+    get_bot_username_request,
+)
 
 
 def setup(token):
@@ -71,10 +76,10 @@ def handle_telegram_webhook(request, bot_token):
     return JsonResponse({"status": "ok"})
 
 
-class TelegramBotsListView(LoginRequiredMixin, generic.ListView):
+class TelegramBotListView(LoginRequiredMixin, generic.ListView):
     login_url = reverse_lazy("account_login")
 
-    model = TelegramBot
+    model = models.TelegramBot
     template_name = "bots/telegram-bots-list.html"
     context_object_name = "telegram_bots"
 
@@ -82,3 +87,30 @@ class TelegramBotsListView(LoginRequiredMixin, generic.ListView):
         queryset = super().get_queryset()
         queryset = queryset.filter(created_by=self.request.user)
         return queryset
+
+
+class TelegramBotCreateView(LoginRequiredMixin, generic.CreateView):
+    login_url = reverse_lazy("account_login")
+    success_url = reverse_lazy("telegram-bots-list")
+
+    model = models.TelegramBot
+    fields = ("bot_name", "bot_token")
+    template_name = "bots/telegram-bots-create.html"
+
+    def form_valid(self, form):
+        token = form.instance.bot_token
+        bot_name = form.instance.bot_name
+
+        response = set_webhook_request(token)
+        if response.status_code != 200:
+            form.add_error("bot_token", "Please enter valid telegram bot token.")
+            return self.form_invalid(form)
+
+        set_bot_name_request(token, bot_name)
+        username = get_bot_username_request(token)
+
+        form.instance.bot_username = username
+        form.instance.created_by = self.request.user
+        form.instance.is_active = True
+
+        return super(TelegramBotCreateView, self).form_valid(form)
