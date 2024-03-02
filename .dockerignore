@@ -1,0 +1,17 @@
+.idea
+*.iws
+*.iml
+*.ipr
+venv
+.DS_Store
+__pycache__/
+*.py[cod]
+.env
+
+.git
+.cache
+
+*.md
+!README*.md
+README-secret.md
+

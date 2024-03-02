@@ -1,0 +1,39 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_HOST=${DB_HOST}
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_PORT=${DB_PORT}
+    restart: always
+
+  web_django:
+    restart: always
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:${WEB_DJANGO_PORT} --workers=4
+    security_opt:
+      - seccomp:unconfined
+    volumes:
+      - ./:/app
+      - ./static:/home/app/web/static
+      - ./media:/home/app/web/media
+      - ./locale:/home/app/web/locale
+    env_file:
+      - .env
+    environment:
+      - TZ=Asia/Tashkent
+    ports:
+      - ${WEB_DJANGO_PORT}:${WEB_DJANGO_PORT}
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
