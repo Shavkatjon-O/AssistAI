@@ -6,7 +6,7 @@ from utils import bot
 User = get_user_model()
 
 class TelegramBot(TimeStampedModel):
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
     
     title = models.CharField(max_length=30)
     _title = models.CharField(max_length=30, editable=False, null=True, blank=True)

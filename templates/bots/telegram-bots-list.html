@@ -8,9 +8,9 @@
     <div class="w-full flex p-4 justify-between items-center">
       <span class="text-lg">Telegram Bots</span>
       <div>
-        <a class="block py-2 px-4 rounded-md text-white bg-zinc-800 hover:bg-zinc-700 transition-all" href="">
+        <button id="openPopup" class="py-2 px-4 rounded-md text-white bg-zinc-700 hover:bg-zinc-600 transition-all">
           <span>Add Telegram Bot</span>
-        </a>
+        </button>
       </div>
     </div>
     <div class="w-full flex flex-wrap">
@@ -31,5 +31,46 @@
     </div>
   </div>
 </div>
+
+<div id="popup" class="hidden">
+  <div id="popup" class="fixed inset-0 bg-zinc-900 bg-opacity-70 flex justify-center items-center">
+    <div class="w-[460px] rounded-lg bg-white">
+      <div class="w-full p-2 flex justify-between items-center border-b border-b-gray-300">
+        <span class="text-xl ml-2">Please fill in the form 🙂</span>
+        <button id="closePopup" class="py-2 px-4 rounded-md text-white bg-zinc-700 hover:bg-zinc-600 transition-all">
+          <span>Close</span>
+        </button>
+      </div>
+      <div class="w-full p-2">
+        <form method="post" action="{% url 'telegram-bots-create' %}" class="w-full space-y-6 flex flex-col">
+          {% csrf_token %}
+          <div class="space-y-4">
+            <div class="flex px-1 flex-col space-y-2">
+              <label for="title">Bot name</label>
+              <input class="py-3 px-2 rounded-sm transition ring-2 focus:ring-2 focus:ring-zinc-900 text-zinc-900 ring-zinc-400 bg-zinc-100 border-none focus:border-none outline-none focus:outline-none" id="title" name="title" type="text" placeholder="Your bot name" required>
+            </div>
+            <div class="flex px-1 flex-col space-y-2">
+              <label for="bot_token">Bot token</label>
+              <input class="py-3 px-2 rounded-sm transition ring-2 focus:ring-2 focus:ring-zinc-900 text-zinc-900 ring-zinc-400 bg-zinc-100 border-none focus:border-none outline-none focus:outline-none" id="bot_token" name="bot_token" type="text" placeholder="Your bot token" required>            
+            </div>
+          </div>
+          <button class="py-4 w-full font-semibold rounded-md text-white bg-zinc-700 hover:bg-zinc-600 transition-all">
+            <span>Add telegram bot</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('openPopup').addEventListener('click', function() {
+    document.getElementById('popup').classList.remove('hidden');
+  });
+
+  document.getElementById('closePopup').addEventListener('click', function() {
+    document.getElementById('popup').classList.add('hidden');
+  });
+</script>
 
 {% endblock content %}

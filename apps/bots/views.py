@@ -71,7 +71,7 @@ def handle_telegram_webhook(request, bot_token):
     return JsonResponse({"status": "ok"})
 
 
-class TelegramBotsListView(LoginRequiredMixin, generic.ListView):
+class TelegramBotListView(LoginRequiredMixin, generic.ListView):
     login_url = reverse_lazy("account_login")
 
     model = TelegramBot
@@ -82,3 +82,16 @@ class TelegramBotsListView(LoginRequiredMixin, generic.ListView):
         queryset = super().get_queryset()
         queryset = queryset.filter(created_by=self.request.user)
         return queryset
+    
+
+class TelegramBotCreate(LoginRequiredMixin, generic.CreateView):
+    login_url = reverse_lazy("account_login")
+    
+    fields = ("title", "bot_token")
+    model = TelegramBot
+    template_name = "bots/telegram-bots-list.html"
+    success_url = reverse_lazy("telegram-bots-list")
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
