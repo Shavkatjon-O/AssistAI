@@ -9,30 +9,8 @@ class TelegramBot(TimeStampedModel):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
     
     title = models.CharField(max_length=30)
-    _title = models.CharField(max_length=30, editable=False, null=True, blank=True)
-
     bot_token = models.CharField(max_length=255)
-    _bot_token = models.CharField(max_length=255, editable=False, null=True, blank=True)
-
-    bot_username = models.CharField(
-        max_length=125, editable=False, blank=True, null=True
-    )
-
-    def save(self, *args, **kwargs):
-        if self._bot_token != self.bot_token:
-            bot.set_webhook_request(self.bot_token)
-
-            username = bot.get_username_request(self.bot_token)
-            self.bot_username = username
-
-            self._bot_token = self.bot_token
-
-        if self._title != self.title:
-            bot.set_name_request(self.bot_token, self.title)
-
-            self._title = self.title
-
-        super(TelegramBot, self).save(*args, **kwargs)
+    bot_username = models.CharField(max_length=125, editable=False, blank=True, null=True)
 
     def __str__(self):
         return self.title
