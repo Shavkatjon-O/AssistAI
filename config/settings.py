@@ -25,6 +25,7 @@ DJANGO_APPS = [
 ]
 
 CUSTOM_APPS = [
+    "apps.theme",
     "apps.common",
     "apps.users",
     "apps.assistants",
@@ -33,7 +34,6 @@ CUSTOM_APPS = [
 
 THIRD_PARTY_APPS = [
     "tailwind",
-    "theme",
     "django_browser_reload",
     "allauth",
     "allauth.account",
@@ -140,7 +140,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "users.User"
 
-TAILWIND_APP_NAME = "theme"
+TAILWIND_APP_NAME = "apps.theme"
 
 INTERNAL_IPS = ["127.0.0.1"]
 

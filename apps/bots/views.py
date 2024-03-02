@@ -2,6 +2,7 @@ import os
 import json
 
 from django.conf import settings
+from django.db.models.query import QuerySet
 from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -76,3 +77,8 @@ class TelegramBotsListView(LoginRequiredMixin, generic.ListView):
     model = TelegramBot
     template_name = "bots/telegram-bots-list.html"
     context_object_name = "telegram_bots"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(created_by=self.request.user)
+        return queryset
