@@ -6,8 +6,8 @@
 <div class="absolute left-64 right-0 top-16 bottom-0 bg-gray-200">
   <div class="w-full h-full p-4 overflow-y-scroll space-y-4">
     <div class="px-6 py-3 rounded-md w-full bg-zinc-700 shadow-gray-300 border border-gray-300">
-      <span class="text-lg text-white font-semibold">Add Telegram Bot</span>
-    </div>    
+      <span class="text-lg text-white font-semibold">Telegram Bots</span>
+    </div>
     {% if form.errors %}
       <div class="w-full px-6 py-3 rounded-md text-white bg-red-500">
         {% for field in form %}
@@ -17,7 +17,10 @@
         {% endfor %}
       </div>
     {% endif %}
-    <div class="w-full p-6 rounded-lg bg-white shadow-xl shadow-gray-300 border border-gray-400">
+    <div class="w-full p-6 rounded-lg space-y-4 bg-white shadow-xl shadow-gray-300 border border-gray-400">
+      <div class="p-3 rounded-md w-full bg-gray-200 shadow-gray-300 border border-gray-400">
+        <span class="font-medium">Please fill in the form to add new telegram bot 🙂</span>
+      </div>
       <form method="post" action="{% url 'telegram-bots-create' %}" class="w-full flex flex-col">
         {% csrf_token %}
         <div class="space-y-4">
