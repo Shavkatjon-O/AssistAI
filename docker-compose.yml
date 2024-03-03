@@ -38,7 +38,7 @@ services:
   nginx:
     build: ./compose/nginx
     ports:
-      - "8080:8003"
+      - "8081:80"
     depends_on:
       - web_django
 
