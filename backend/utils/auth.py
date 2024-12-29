@@ -1,15 +1,14 @@
 from typing import Type
 
+from config import *
+from database import get_db
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials
 from jose import JWTError, jwt
-from sqlalchemy.orm import Session
-
-from config import *
-from database import get_db
 from models import User
 from oauth2 import bearer_security
-from schemas import TokenData
+from schemas.auth import TokenData
+from sqlalchemy.orm import Session
 
 
 async def get_current_user(

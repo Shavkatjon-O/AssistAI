@@ -1,13 +1,12 @@
 import datetime
 
 import uvicorn
-from fastapi import Depends, FastAPI, HTTPException
-from sqlalchemy.orm import Session
-
 from database import get_db
+from fastapi import Depends, FastAPI, HTTPException
 from jwt import create_access_token, get_hashed_password, verify_password
 from models import User
-from schemas import Token, UserCreate, UserOut
+from schemas.auth import Token, UserCreate, UserOut
+from sqlalchemy.orm import Session
 from utils.auth import get_current_user
 
 app = FastAPI()
