@@ -9,3 +9,6 @@ python-dotenv
 psycopg2-binary
 pydantic
 pre-commit
+
+# langchain
+langchain-openai
