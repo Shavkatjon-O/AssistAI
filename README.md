@@ -1,3 +1,3 @@
 <!-- ### assistai -->
 
-![Preview](_docs/preview.png)
+![Preview](_docs/preview-dark.png)
