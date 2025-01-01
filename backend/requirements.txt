@@ -12,3 +12,6 @@ pre-commit
 
 # langchain
 langchain-openai
+
+# smtp
+email-validator
