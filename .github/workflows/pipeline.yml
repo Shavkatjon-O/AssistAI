@@ -1,0 +1,19 @@
+name: assistai github workflows pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  deploys:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: echo message
+        run: echo "Hello World!"
+
+    # finish logic here
