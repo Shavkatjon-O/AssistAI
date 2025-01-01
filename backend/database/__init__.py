@@ -1,1 +1,1 @@
-from database.session import get_db, engine, SessionLocal, Base
+from database.session import Base, SessionLocal, engine, get_db  # noqa

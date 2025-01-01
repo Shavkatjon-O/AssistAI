@@ -1,3 +1,5 @@
+import sys
+
 from langchain_openai import ChatOpenAI
 
 if __name__ == "__main__":
@@ -9,7 +11,7 @@ if __name__ == "__main__":
 
     if os.getenv("OPENAI_API_KEY") is None:
         print("Please set OPENAI_API_KEY environment variable")
-        exit(1)
+        sys.exit(1)
 
     model = ChatOpenAI(model="gpt-4o-mini")
 
