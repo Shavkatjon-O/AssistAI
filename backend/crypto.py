@@ -1,6 +1,5 @@
+from config import *  # noqa
 from cryptography.fernet import Fernet
-
-from config import *
 
 # string to bytes
 SECRET_KEY = bytes(SECRET_KEY, encoding="utf-8")

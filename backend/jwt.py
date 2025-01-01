@@ -1,10 +1,9 @@
 from datetime import datetime, timedelta, timezone
 from typing import Union
 
+from config import *  # noqa
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-
-from config import *
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

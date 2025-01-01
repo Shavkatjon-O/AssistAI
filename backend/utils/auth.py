@@ -1,6 +1,6 @@
 from typing import Type
 
-from config import *
+from config import *  # noqa
 from database import get_db
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials
