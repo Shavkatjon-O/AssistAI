@@ -29,7 +29,7 @@ coreApi.interceptors.response.use(
   },
   async (error) => {
     const { response } = error;
-    
+
     if (response && response.status === 401) {
       Cookies.remove("accessToken");
       Cookies.remove("refreshToken");
