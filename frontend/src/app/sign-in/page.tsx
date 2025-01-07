@@ -1,68 +1,84 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import axios from "axios"
+// import { useEffect, useState } from "react"
+// import Cookies from "js-cookie"
 
-import { toast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
-const FormSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-})
+export default function SignInPage() {
+  const onSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
 
-export default function InputForm() {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      username: "",
-    },
-  })
+    const username = (event.currentTarget.elements.namedItem("username") as HTMLInputElement).value
+    const password = (event.currentTarget.elements.namedItem("password") as HTMLInputElement).value
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
+    if (username && password) {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/token`, {
+        username: username,
+        password: password,
+      })
+
+      if (response.status === 200) {
+        const token = response.data.access_token
+        console.log(token)
+        window.location.href = "/admin"
+      }
+    }
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Submit</Button>
-      </form>
-    </Form>
+    <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
+      <div className="flex w-full max-w-sm flex-col gap-6">
+        <div className="flex flex-col gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-2xl">Sign In</CardTitle>
+              <CardDescription>
+                Enter your username below to sign in to your account
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={onSubmitHandler}>
+                <div className="flex flex-col gap-6">
+                  <div className="grid gap-2">
+                    <Label htmlFor="username">Username</Label>
+                    <Input
+                      id="username"
+                      type="text"
+                      placeholder="Enter your username"
+                      className="h-12"
+                      required
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="password">Password</Label>
+                    <Input 
+                      id="password"
+                      type="password"
+                      placeholder="Enter your password"
+                      className="h-12" 
+                      required 
+                    />
+                  </div>
+                  <Button type="submit" className="w-full h-12">
+                    Sign In
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
   )
 }
