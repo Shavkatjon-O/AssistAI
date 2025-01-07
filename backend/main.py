@@ -8,8 +8,12 @@ from models import User
 from schemas.auth import Token, UserCreate, UserOut
 from sqlalchemy.orm import Session
 from utils.auth import get_current_user
+from utils.admins import create_initial_admin
+from routers import admins
 
 app = FastAPI()
+
+app.include_router(admins.router)
 
 
 @app.post("/sign-up", response_model=UserOut)
@@ -57,6 +61,8 @@ async def profile(current_user: User = Depends(get_current_user)):
 
 
 if __name__ == "__main__":
+    create_initial_admin()
+
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
