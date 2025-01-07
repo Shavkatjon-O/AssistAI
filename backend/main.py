@@ -8,12 +8,24 @@ from models import User
 from schemas.auth import Token, UserCreate, UserOut
 from sqlalchemy.orm import Session
 from utils.auth import get_current_user
-from utils.admins import create_initial_admin
-from routers import admins
+from admins.utils import create_initial_admin
+from fastapi.middleware.cors import CORSMiddleware
+
+from admins.routers import router as admin_router
 
 app = FastAPI()
 
-app.include_router(admins.router)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(admin_router)
 
 
 @app.post("/sign-up", response_model=UserOut)

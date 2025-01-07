@@ -7,7 +7,7 @@ from fastapi.security import HTTPAuthorizationCredentials
 from jose import JWTError, jwt
 from models import Admin
 from oauth2 import bearer_security
-from schemas.admins import TokenData
+from admins.schemas import TokenData
 from sqlalchemy.orm import Session
 
 
