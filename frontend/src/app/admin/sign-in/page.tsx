@@ -2,7 +2,7 @@
 
 import axios from "axios"
 // import { useEffect, useState } from "react"
-// import Cookies from "js-cookie"
+import Cookies from "js-cookie"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -30,6 +30,7 @@ export default function SignInPage() {
 
       if (response.status === 200) {
         const token = response.data.access_token
+        Cookies.set("access_token", token)
         console.log(token)
         window.location.href = "/admin"
       }

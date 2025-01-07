@@ -1,21 +1,13 @@
-import Image from "next/image";
+"use client";
 
-const Page = () => {
-  return (
-    <div className="h-screen flex justify-center items-center">
-      <div className="flex flex-col justify-center items-center">
-        <Image
-          src="/assistai.png"
-          alt="AssistAI Logo"
-          width={256}
-          height={256}
-          className="animate-bounce"
-        />
-        <div>
-          Coming Soon ...
-        </div>
-      </div>
-    </div>
-  );
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
+export default function Page() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push('/admin/sign-in');
+  }, [router]);
+  return null;
 };
-export default Page;
